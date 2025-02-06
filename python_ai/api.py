@@ -1,22 +1,20 @@
 from flask import Flask, request, jsonify
+from transformers import pipeline
 
 app = Flask(__name__)
 
-# Sample AI logic (Replace this with actual AI model integration later)
-def generate_response(question):
-    responses = {
-        "What is 2 + 2?": "2 + 2 = 4",
-        "What is the capital of France?": "The capital of France is Paris.",
-        "What is Newton's second law?": "Newton's second law states that F = ma."
-    }
-    return responses.get(question, "I'm not sure. Can you rephrase the question?")
+# Load a local AI model (like a small GPT model)
+qa_model = pipeline("text-generation", model="mistralai/Mistral-7B-Instruct-v0.1")
 
-@app.route("/ask", methods=["POST"])
+@app.route('/ask', methods=['POST'])
 def ask():
     data = request.get_json()
     question = data.get("query", "")
-    response = generate_response(question)
-    return jsonify({"response": response})
 
-if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    response = qa_model(question, max_length=150, do_sample=True)
+    answer = response[0]['generated_text']
+
+    return jsonify({"answer": answer})
+
+if __name__ == '__main__':
+    app.run(debug=True)
