@@ -3,7 +3,8 @@
 
 #include <string>
 
-class AIConnector {
+
+ AIConnector {
 public:
     AIConnector(); // Constructor
     std::string getDifficultyLevel(const std::string& subject); // Get difficulty based on subject
