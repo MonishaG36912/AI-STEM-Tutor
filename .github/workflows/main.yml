@@ -31,6 +31,10 @@ jobs:
       - name: Install CMake
         run: sudo apt-get install cmake
 
+      # Remove CMake cache to avoid conflicts
+      - name: Remove CMake cache
+        run: rm -rf ${{ github.workspace }}/build/CMakeCache.txt
+
       # Configure CMake for C++ build
       - name: Configure CMake
         run: |
