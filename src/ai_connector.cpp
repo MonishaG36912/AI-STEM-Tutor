@@ -1,7 +1,7 @@
 #include "ai_connector.h"
 #include <iostream>
 #include <string>
-#include <curl/curl.h>  // For HTTP requests (if using REST API for AI interaction)
+//#include <curl/curl.h>  // For HTTP requests (if using REST API for AI interaction)
 
 AIConnector::AIConnector() {}
 
