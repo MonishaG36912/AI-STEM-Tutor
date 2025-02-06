@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/tutor_app.dir/src/main.cpp.o CMakeFiles/tutor_app.dir/src/tutor.cpp.o CMakeFiles/tutor_app.dir/src/ai_connector.cpp.o -o tutor_app 
