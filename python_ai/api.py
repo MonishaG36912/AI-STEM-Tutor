@@ -1,23 +1,22 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Mock AI functions to simulate difficulty-based answers
-def get_answer(question, difficulty):
-    if difficulty == "easy":
-        return "This is an easy answer."
-    elif difficulty == "medium":
-        return "This is a medium difficulty answer."
-    else:
-        return "This is a hard answer."
+# Sample AI logic (Replace this with actual AI model integration later)
+def generate_response(question):
+    responses = {
+        "What is 2 + 2?": "2 + 2 = 4",
+        "What is the capital of France?": "The capital of France is Paris.",
+        "What is Newton's second law?": "Newton's second law states that F = ma."
+    }
+    return responses.get(question, "I'm not sure. Can you rephrase the question?")
 
-@app.route('/get_answer', methods=['POST'])
-def api_get_answer():
-    data = request.json
-    question = data.get('question')
-    difficulty = data.get('difficulty')
-    answer = get_answer(question, difficulty)
-    return jsonify({"answer": answer})
+@app.route("/ask", methods=["POST"])
+def ask():
+    data = request.get_json()
+    question = data.get("query", "")
+    response = generate_response(question)
+    return jsonify({"response": response})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="127.0.0.1", port=5000, debug=True)
