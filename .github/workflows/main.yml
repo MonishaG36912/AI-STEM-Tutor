@@ -1,0 +1,52 @@
+name: C++ Build Check
+
+on:
+  push:
+    branches: ["*"]  # Trigger for all branches
+  pull_request:
+    branches: ["*"]  # Trigger for all pull requests
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Install dependencies for both C++ and Python (if needed)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Install CMake (if not installed in the GitHub runner)
+      - name: Install CMake
+        run: sudo apt-get install cmake
+
+      # Configure CMake for C++ build
+      - name: Configure CMake
+        run: |
+          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      # Build the C++ project
+      - name: Build C++ Project
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      # Cache the CMake build
+      - name: Cache Build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{github.workspace}}/build
+            !${{github.workspace}}/build/CMakeCache.txt
+          key: ${{ runner.os }}-build-${{ hashFiles('**/*.cpp', '**/*.h', 'CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
